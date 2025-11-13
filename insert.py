@@ -56,7 +56,7 @@ sys.path.insert(0, str(backend_app_dir))
 
 try:
     # Importar db directamente (el archivo se llama db.py en backend/app/)
-    import db
+    import db # type: ignore
 except ImportError as e:
     print(f"❌ Error: No se pudo importar el módulo db: {e}")
     print(f"   Script dir: {script_dir}")
