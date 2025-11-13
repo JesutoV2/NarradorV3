@@ -32,3 +32,14 @@ Thumbs.db
 out/
 *.db
 *.sql
+
+__pycache__/
+*.py[cod]
+.venv/
+*.db
+seminario_narrador.db
+out/
+*.wav
+.env
+.vscode/
+EOF
