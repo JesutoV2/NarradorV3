@@ -1,0 +1,34 @@
+node_modules/
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Entornos virtuales
+Include/
+Lib/
+Scripts/
+pyvenv.cfg
+
+# IDEs
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Archivos de salida
+out/
+*.db
+*.sql
