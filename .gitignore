@@ -43,3 +43,26 @@ out/
 .env
 .vscode/
 EOF
+
+# Entorno Virtual
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Base de datos SQLite (¡No subir telemetría local!)
+*.db
+*.sqlite3
+seminario_narrador.db
+
+# Compilación PyInstaller (Futuro)
+build/
+dist/
+*.spec
+
+# Sistema Operativo
+.DS_Store
+Thumbs.db
