@@ -25,7 +25,7 @@ Procesar páginas web (HTML/CSS), filtrar el "ruido" (anuncios, menús, pies de 
 | `filters.py` | Limpieza de HTML (BeautifulSoup) | 🟢 Funcional / Mejorable |
 | `extractor.py` | Recolección de párrafos limpios | 🟢 Funcional |
 | `tts.py` | Motor SAPI5 a WAV (`pyttsx3`) | 🟢 Funcional |
-| `db_sqlite.py` / `db.py` | Lógica de Base de Datos SQLite | 🟡 Duplicidad detectada |
+| `db.py` | Lógica de Base de Datos SQLite (`seminario_narrador.db`) | 🟢 Funcional (Unificado) |
 | `segmenter.py` / `normalizer.py` | Limpieza y chunking de texto | 🟢 Funcional |
 
 ## 💻 Mapa de Módulos (Extensión MV3)
@@ -39,6 +39,13 @@ Procesar páginas web (HTML/CSS), filtrar el "ruido" (anuncios, menús, pies de 
 
 - **TTCU (Tiempo Hasta Contenido Útil):** Segundos desde que se solicita hasta que inicia el audio.
 - **PTNN (Proporción de Texto No-Informativo):** % de "basura" (caracteres) removidos del HTML original.
+
+## 🛠️ Scripts Auxiliares (Raíz)
+
+| Archivo | Propósito | Estado |
+| --------- | ----------- | -------- |
+| `insert.py` | Simulador e inyector de datos sintéticos para pruebas de hardware | 🟢 Funcional |
+| `consultas_bd.py` | CLI para visualizar métricas por dominio y exportar a CSV | 🟢 Funcional |
 
 ---
 *Nota para el Asistente AI: Consultar este archivo para entender el contexto global antes de proponer cambios arquitectónicos severos.*
