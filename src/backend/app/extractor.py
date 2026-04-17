@@ -5,8 +5,8 @@ import re
 
 from bs4 import BeautifulSoup, Tag
 
-from backend.app.normalizer import normalize_text, split_paragraphs, long_enough, pretty_join
-from backend.app.filters import clean_html_and_pick
+from app.normalizer import normalize_text, split_paragraphs, long_enough, pretty_join
+from app.filters import clean_html_and_pick
 
 def _parse(html: str) -> BeautifulSoup:
     try:

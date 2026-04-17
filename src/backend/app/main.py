@@ -9,17 +9,16 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
-
-from backend.app.extractor import extract_readable_text
-from backend.app.tts import text_to_wav
+from app.extractor import extract_readable_text
+from app.tts import text_to_wav
 
 # Integración con base de datos
 try:
-    from backend.app import db
+    from app import db
     DB_AVAILABLE = True
 except Exception as e:
     DB_AVAILABLE = False
-    print(f"⚠️ Base de datos no disponible: {e}")
+    print(f"Base de datos no disponible: {e}")
 
 app = FastAPI(title="Narrador Web", version="0.1.0")
 

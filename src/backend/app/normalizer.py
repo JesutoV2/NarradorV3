@@ -17,7 +17,7 @@ def normalize_text(text: str) -> str:
 def long_enough(text: str, min_chars: int = 60) -> bool:
     return bool(text) and len(text) >= min_chars
 
-def split_paragraphs(text: str, min_chars: int = 60) -> List[str]:
+def split_paragraphs(text: str, max_length: int = 800) -> List[str]:    
     if not text:
         return []
     blocks = [b.strip() for b in text.split("\n\n") if b.strip()]

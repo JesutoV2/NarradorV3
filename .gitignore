@@ -1,68 +1,29 @@
-node_modules/
-# Python
-.venv/
+# 1. Entornos virtuales de Python
 venv/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-*.so
-*.egg
-*.egg-info/
-dist/
-build/
-
-# Entornos virtuales
-Include/
-Lib/
-Scripts/
-pyvenv.cfg
-
-# IDEs
-.vscode/
-.idea/
-
-# Sistema
-.DS_Store
-Thumbs.db
-*.log
-
-# Archivos de salida
-out/
-*.db
-*.sql
-
-__pycache__/
-*.py[cod]
 .venv/
-*.db
-seminario_narrador.db
-out/
-*.wav
-.env
-.vscode/
-EOF
-
-# Entorno Virtual
-venv/
 env/
 
-# Python Cache
+# 2. Archivos compilados y caché de Python
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Base de datos SQLite (¡No subir telemetría local!)
+# 3. Bases de datos locales (¡Crucial!)
 *.db
 *.sqlite3
 seminario_narrador.db
 
-# Compilación PyInstaller (Futuro)
-build/
-dist/
-*.spec
+# 4. Archivos multimedia y carpetas de salida
+out/
+*.wav
 
-# Sistema Operativo
+# 5. Variables de entorno y secretos
+.env
+.env.local
+
+# 6. Configuraciones del editor (VS Code)
+.vscode/
+
+# 7. Archivos del sistema operativo
 .DS_Store
 Thumbs.db

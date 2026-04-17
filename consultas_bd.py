@@ -25,7 +25,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Ruta de la base de datos
-DB_PATH = Path(__file__).parent / "backend" / "seminario_narrador.db"
+DB_PATH = Path(__file__).parent / "src" / "backend" / "seminario_narrador.db"
 
 def conectar():
     """Conecta a la base de datos SQLite."""

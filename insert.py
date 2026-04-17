@@ -50,13 +50,13 @@ from datetime import datetime, timedelta
 
 # Agregar rutas necesarias al path
 script_dir = Path(__file__).parent
-backend_app_dir = script_dir / "backend" / "app"
+backend_app_dir = script_dir / "src" / "backend" / "app"
 sys.path.insert(0, str(script_dir))
-sys.path.insert(0, str(backend_app_dir))
+sys.path.insert(0, str(script_dir / "src" / "backend"))
 
 try:
-    # Importar db directamente (el archivo se llama db.py en backend/app/)
-    import db # type: ignore
+    # Importar db desde la carpeta app
+    from app import db # type: ignore
 except ImportError as e:
     print(f"❌ Error: No se pudo importar el módulo db: {e}")
     print(f"   Script dir: {script_dir}")
@@ -282,7 +282,7 @@ HARDWARE_SPECS = {
 # ============================================================================
 # FUNCIÓN DE INSERCIÓN
 # ============================================================================
-
+6
 def insertar_datos_simulados():
     """
     Inserta los datos sintéticos pre-calculados en la base de datos.

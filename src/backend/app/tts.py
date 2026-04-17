@@ -1,8 +1,7 @@
 from __future__ import annotations
-
+from typing import Optional
 import os
 import time
-from typing import Optional
 
 def _choose_voice(engine, hint: Optional[str]) -> None:
     wanted = (hint or "").lower()
