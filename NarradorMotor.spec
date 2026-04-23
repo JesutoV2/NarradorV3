@@ -3,10 +3,10 @@
 
 a = Analysis(
     ['run_server.py'],
-    pathex=[],
+    pathex=['src/backend'],
     binaries=[],
-    datas=[('src/backend/app', 'app')],
-    hiddenimports=['pyttsx3.drivers.sapi5', 'pydantic', 'sqlite3'],
+    datas=[],
+    hiddenimports=['pyttsx3.drivers.sapi5'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

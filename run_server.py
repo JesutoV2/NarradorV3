@@ -1,7 +1,26 @@
 import sys
 import os
-import uvicorn
-import logging
+import traceback
+
+# 1. Inyectar la ruta ANTES de importar módulos locales
+if getattr(sys, 'frozen', False):
+    # Ejecutable de PyInstaller
+    application_path = sys._MEIPASS
+    sys.path.insert(0, application_path)
+else:
+    # Script normal
+    application_path = os.path.dirname(os.path.abspath(__file__))
+    sys.path.insert(0, os.path.join(application_path, "src", "backend"))
+
+try:
+    import uvicorn
+    from app.main import app as fastapi_app
+    import logging
+except Exception as e:
+    print("❌ Error fatal al importar dependencias internas:")
+    traceback.print_exc()
+    input("\nPresiona ENTER para salir...")
+    sys.exit(1)
 
 # Silenciar logs excesivos de uvicorn para una terminal más limpia
 logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
@@ -22,17 +41,11 @@ def print_ui():
     print("------------------------------------------------------------\n")
 
 if __name__ == "__main__":
-    # Inyectar la ruta correcta para que las importaciones relativas funcionen
-    if getattr(sys, 'frozen', False):
-        # Ejecutable de PyInstaller
-        application_path = sys._MEIPASS
-    else:
-        # Script normal
-        application_path = os.path.dirname(os.path.abspath(__file__))
-    
-    sys.path.insert(0, os.path.join(application_path, "src", "backend"))
-    
-    print_ui()
-    
-    # Iniciar FastAPI programáticamente
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, log_level="warning")
+    try:
+        print_ui()
+        # Pasamos el objeto de la aplicación directamente en lugar del string
+        uvicorn.run(fastapi_app, host="127.0.0.1", port=8000, log_level="warning")
+    except Exception as e:
+        print("\nOCURRIO UN ERROR FATAL AL INICIAR EL SERVIDOR:")
+        traceback.print_exc()
+        input("\nPresiona ENTER para salir...")
