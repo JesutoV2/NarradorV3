@@ -41,6 +41,14 @@ def text_to_wav(text: str, out_path: str, voice_hint: Optional[str] = None, rate
         _choose_voice(eng, voice_hint)
         eng.save_to_file(text, out_path)
         eng.runAndWait()
+    except Exception as run_exc:
+        # Limpiar archivo corrupto si pyttsx3 falla a la mitad
+        if os.path.exists(out_path):
+            try:
+                os.remove(out_path)
+            except Exception:
+                pass
+        raise RuntimeError(f"Error en motor TTS: {run_exc}")
     finally:
         try:
             eng.stop()
@@ -50,4 +58,11 @@ def text_to_wav(text: str, out_path: str, voice_hint: Optional[str] = None, rate
         if os.path.exists(out_path) and os.path.getsize(out_path) > 0:
             return
         time.sleep(0.1)
+        
+    # Limpiar archivo si falló por timeout (ej. tamaño 0)
+    if os.path.exists(out_path):
+        try:
+            os.remove(out_path)
+        except Exception:
+            pass
     raise RuntimeError("No se generó el WAV a tiempo.")

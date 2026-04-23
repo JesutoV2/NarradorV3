@@ -35,15 +35,21 @@ import sqlite3
 import logging
 from typing import Optional
 from urllib.parse import urlparse
+import sys
 from pathlib import Path
 
 # ============================================================================
 # CONFIGURACIÓN
 # ============================================================================
 
-# Ubicación de la base de datos SQLite
-# Por defecto, en el directorio del proyecto: backend/seminario_narrador.db
-DEFAULT_DB_PATH = Path(__file__).parent.parent / "seminario_narrador.db"
+# Ajuste de ruta para compatibilidad con PyInstaller
+if getattr(sys, 'frozen', False):
+    # Si corre como ejecutable, la BD va junto al .exe
+    BASE_DIR = Path(sys.executable).parent
+else:
+    BASE_DIR = Path(__file__).parent.parent
+
+DEFAULT_DB_PATH = BASE_DIR / "seminario_narrador.db"
 DB_PATH = os.getenv("SNW_SQLITE_DB", str(DEFAULT_DB_PATH))
 
 # ============================================================================

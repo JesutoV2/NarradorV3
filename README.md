@@ -1,66 +1,46 @@
-# 🎙️ Narrador Web V2
+# Narrador Web V2
 
-Herramienta de accesibilidad web diseñada para extraer, limpiar y narrar contenido principal de páginas web, descartando "ruido" (anuncios, menús) y evaluando el rendimiento a través de métricas específicas (TTCU y PTNN).
+Herramienta de accesibilidad web disenada para extraer, limpiar y narrar el
+contenido principal de paginas web, descartando el ruido visual (anuncios,
+menus) y evaluando el rendimiento a traves de metricas especificas (TTCU y
+PTNN).
 
-## ⚙️ ¿Cómo funciona?
+## Funcionamiento
 
-El sistema se divide en dos partes:
+1. Frontend (Extension): Se instala en Microsoft Edge. Captura el codigo de la
+   pagina web actual y lo envia al motor.
+2. Backend (Motor): Servidor local en Python (FastAPI). Recibe el HTML, lo
+   limpia con BeautifulSoup, extrae el texto, lo convierte en audio con pyttsx3,
+   lo devuelve a la extension y registra las metricas en SQLite.
 
-1. **La Extensión (Frontend):** Se instala en Microsoft Edge. Actúa como los "ojos" del usuario, capturando el código de la página web actual y enviándolo al motor.
-2. **El Motor (Backend):** Un servidor local construido en Python (FastAPI) que recibe la página, la limpia usando filtros inteligentes (`BeautifulSoup`), extrae el texto útil, lo convierte en audio (`pyttsx3`) y lo devuelve a la extensión para su reproducción. Además, registra métricas de rendimiento en una base de datos SQLite.
+## Instalacion y Uso (Desarrollo)
 
----
+Requisitos: Windows 11, Python 3.11.
 
-## 🚀 Guía de Instalación y Uso (Desarrollo)
+1. Preparar entorno e instalar dependencias: python -m venv .venv
+   .venv\Scripts\activate pip install -r requeriments.txt
 
-**Requisitos:** Windows 11 y Python 3.11 instalado.
+2. Arrancar el servidor: cd src\backend uvicorn app.main:app --host 127.0.0.1
+   --port 8000 --reload
 
-### 1. Preparar el Entorno Virtual
+3. Instalar la extension: Abre Edge, ve a edge://extensions/, activa "Modo de
+   desarrollador", clic en "Cargar desempaquetada" y selecciona la carpeta
+   `extension/`.
 
-Abre una terminal en la raíz del proyecto y ejecuta:
+4. Uso: Navega a un articulo, haz clic en el boton "Narrar" de la extension. El
+   proceso operara 100% offline.
 
-```powershell
-python -m venv .venv
-.venv\\Scripts\\activate
-```
+## Scripts de Analisis
 
-### 2. Instalar Dependencias
+- insert.py: Inyecta datos sinteticos de pruebas de hardware (ejecutar una vez).
+- consultas_bd.py: Interfaz CLI para ver estadisticas, exportar a CSV y analizar
+  metricas.
 
-```powershell
-pip install -r requirements.txt
-```
+## Licencia
 
-### 3. Arrancar el Servidor (Motor Backend)
-
-Para que el sistema funcione, el motor debe estar encendido.
-
-```powershell
-cd src\backend
-uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
-```
-
-*Nota: El servidor estará escuchando en el puerto 8000. Si está ocupado, usa el 8010 y actualiza `extension/content.js`.*
-
-### 4. Cargar la Extensión en Microsoft Edge
-
-1. Abre Microsoft Edge y ve a `edge://extensions/`.
-2. Activa el **"Modo de desarrollador"** (menú izquierdo).
-3. Haz clic en **"Cargar desempaquetada"** y selecciona la carpeta `extension/` de este proyecto.
-
-### 5. Modo de Uso
-
-1. Navega a una página web con artículos o noticias (ej. Wikipedia, INEGI, SciELO).
-2. Haz clic en el botón flotante **"Narrar"**.
-3. El sistema procesará el texto (calculando el TTCU y PTNN) y comenzará la reproducción de audio en menos de 12 segundos. Todo el proceso es **100% offline y privado**.
+Este proyecto esta bajo la Licencia MIT. Consulta el archivo LICENSE.
 
 ---
 
-## 📊 Scripts Auxiliares y Datos
-
-En la raíz del proyecto encontrarás herramientas para analizar el rendimiento del sistema:
-
-* **`insert.py`**: Generador de datos sintéticos. Simula cómo rendiría el programa en 3 computadoras con hardware diferente (Gama Baja, Media y Alta) basándose en registros reales. (Ejecutar solo 1 vez).
-* **`consultas_bd.py`**: Herramienta interactiva en terminal para visualizar la base de datos (`seminario_narrador.db`), ver promedios, buscar por dominios y exportar los datos a CSV para análisis en Excel.
-
----
-*Nota para IAs y Asistentes: Para entender el panorama completo del código y los planes futuros, consultar obligatoriamente los archivos `1_ANALISIS_Y_ARQUITECTURA.md` y `2_BITACORA_Y_FUTURO.md`.*
+Notas: Para entender el panorama completo, consultar obligatoriamente
+1_ANALISIS_Y_ARQUITECTURA.md y 2_BITACORA_Y_FUTURO.md.

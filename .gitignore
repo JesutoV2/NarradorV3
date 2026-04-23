@@ -16,6 +16,8 @@ seminario_narrador.db
 # 4. Archivos multimedia y carpetas de salida
 out/
 *.wav
+build/
+dist/
 
 # 5. Variables de entorno y secretos
 .env
@@ -27,3 +29,4 @@ out/
 # 7. Archivos del sistema operativo
 .DS_Store
 Thumbs.db
+desktop.ini

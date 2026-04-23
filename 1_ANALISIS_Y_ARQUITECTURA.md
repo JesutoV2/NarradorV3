@@ -1,51 +1,70 @@
-# 🏗️ Arquitectura y Estado del Proyecto - Narrador V2
+# Analisis y Arquitectura - Narrador V2
 
-## 🎯 Objetivo Principal
+## Objetivo Principal
 
-Procesar páginas web (HTML/CSS), filtrar el "ruido" (anuncios, menús, pies de página) y narrar únicamente el contenido principal y relevante usando síntesis de voz, evaluando métricas de rendimiento (TTCU, PTNN).
+Procesar paginas web (HTML/CSS), filtrar componentes no deseados (anuncios,
+menus, pies de pagina) y narrar unicamente el contenido principal usando
+sintesis de voz, evaluando al mismo tiempo metricas de rendimiento.
 
-## 🧩 Flujo de Datos Actual
+## Metricas de Rendimiento
 
-1. **Usuario** hace clic en "Narrar" en la página web (`content.js`).
-2. La extensión envía el `document.documentElement.outerHTML` íntegro al endpoint `/speak`.
-3. **FastAPI (`main.py`)** recibe el HTML.
-4. `filters.py` entra en acción:
-   - Elimina scripts, estilos, iframes, footers y asides.
-   - Busca el contenedor con mayor puntaje (más texto y subtítulos).
-5. `extractor.py` toma ese contenedor y filtra párrafos con longitud menor a 60 caracteres (eliminando links cortos o UI suelta).
-6. `tts.py` convierte el texto filtrado a `.wav` usando `pyttsx3`.
-7. Se insertan las métricas en SQLite.
-8. La extensión recibe el `run_id` y delega a `offscreen.js` la reproducción del endpoint `/stream/{run_id}`.
+- TTCU (Tiempo Hasta Contenido Util): Segundos transcurridos desde que se
+  solicita la narracion hasta que inicia el audio.
+- PTNN (Proporcion de Texto No-Informativo Narrado): Porcentaje de caracteres
+  eliminados (basura) respecto al HTML original.
 
-## 📂 Mapa de Módulos (Backend)
+## Flujo de Procesamiento
 
-| Archivo | Propósito | Estado |
-| --------- | ----------- | -------- |
-| `main.py` | API REST / Orquestador | 🟢 Funcional |
-| `filters.py` | Limpieza de HTML (BeautifulSoup) | 🟢 Funcional / Mejorable |
-| `extractor.py` | Recolección de párrafos limpios | 🟢 Funcional |
-| `tts.py` | Motor SAPI5 a WAV (`pyttsx3`) | 🟢 Funcional |
-| `db.py` | Lógica de Base de Datos SQLite (`seminario_narrador.db`) | 🟢 Funcional (Unificado) |
-| `segmenter.py` / `normalizer.py` | Limpieza y chunking de texto | 🟢 Funcional |
+1. La extension (content.js) captura el HTML integro de la pagina y lo envia via
+   POST al endpoint /speak.
+2. El orquestador (main.py) recibe la peticion, realiza una auto-limpieza de
+   audios residuales previos y transfiere el HTML.
+3. El filtro (filters.py) usa BeautifulSoup4 y lxml para eliminar etiquetas
+   inutiles y seleccionar el contenedor principal con mayor puntaje de
+   relevancia.
+4. El extractor (extractor.py) toma el contenedor limpio, aplica limpieza de
+   caracteres (normalizer.py) y extrae los parrafos en orden secuencial.
+5. El motor TTS (tts.py) utiliza pyttsx3 para convertir el texto extraido en un
+   archivo de audio .wav local.
+6. Las metricas TTCU y PTNN son calculadas y almacenadas en la base de datos
+   (db.py).
+7. La extension recibe el ID y delega a offscreen.js la reproduccion silenciosa
+   del endpoint /stream.
 
-## 💻 Mapa de Módulos (Extensión MV3)
+## Modulos del Backend
 
-| Archivo        | Propósito                                                | Estado       |
-|----------------|----------------------------------------------------------|--------------|
-| `content.js`   | Botón UI inyectado, máquina de estados y captura de HTML | 🟢 Funcional |
-| `offscreen.js` | Reproductor de audio invisible (By-pass límites MV3)     | 🟢 Funcional |
+- main.py: API REST central. Define endpoints, orquesta el flujo y maneja la
+  limpieza de archivos residuales generados.
+- filters.py: Logica de limpieza del DOM. Oculta elementos, desenvuelve web
+  components y elige heuristicamente contenedores semanticos validos.
+- extractor.py: Iterador del DOM limpio que extrae los bloques de texto
+  asegurandose que cumplan con las reglas de legibilidad y longitud minima.
+- normalizer.py: Set de utilerias de expresiones regulares para particionar o
+  normalizar espacios en strings limpios.
+- tts.py: Integracion con SAPI5. Selecciona la voz adecuada del sistema
+  operativo y renderiza el texto en un archivo de formato wav, con manejo de
+  fallas.
+- db.py: Gestion nativa de la base de datos SQLite (seminario_narrador.db).
+  Evita duplicidades y genera los IDs de cada solicitud (run_id).
 
-## ⚙️ Métricas Principales
+## Librerias Clave del Sistema
 
-- **TTCU (Tiempo Hasta Contenido Útil):** Segundos desde que se solicita hasta que inicia el audio.
-- **PTNN (Proporción de Texto No-Informativo):** % de "basura" (caracteres) removidos del HTML original.
+- FastAPI y Uvicorn: Responsables del ciclo de vida del servidor web y de la API
+  expuesta a la extension de Edge.
+- BeautifulSoup4 y lxml: Motores de parseo estructural del DOM, veloces y
+  tolerantes a errores en etiquetas HTML.
+- pyttsx3: Motor Text-to-Speech totalmente offline.
+- pydantic: Define las reglas y tipos de datos que la API espera recibir
+  (payloads).
 
-## 🛠️ Scripts Auxiliares (Raíz)
+## Utilidades y Testing
 
-| Archivo | Propósito | Estado |
-| --------- | ----------- | -------- |
-| `insert.py` | Simulador e inyector de datos sintéticos para pruebas de hardware | 🟢 Funcional |
-| `consultas_bd.py` | CLI para visualizar métricas por dominio y exportar a CSV | 🟢 Funcional |
+- insert.py: Inyector de datos de prueba, simula iteraciones de hardware desde
+  la CLI.
+- consultas_bd.py: Panel interactivo de consola para realizar lecturas,
+  promedios grupales y extraccion de metricos a CSV.
 
 ---
-*Nota para el Asistente AI: Consultar este archivo para entender el contexto global antes de proponer cambios arquitectónicos severos.*
+
+Nota para la IA: El proyecto requiere estricto orden en el pase de datos entre
+modulos para evitar cuellos de botella.

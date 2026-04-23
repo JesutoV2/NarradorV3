@@ -3,6 +3,8 @@ from __future__ import annotations
 import os
 import uuid
 import logging
+import glob
+import sys
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException
@@ -39,7 +41,14 @@ class SpeakIn(BaseModel):
 class SpeakOut(BaseModel):
     run_id: str
 
-OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "out")
+# Ajuste de ruta para compatibilidad con PyInstaller
+if getattr(sys, 'frozen', False):
+    # Si corre como ejecutable, la carpeta out va junto al .exe
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    BASE_DIR = os.path.join(os.path.dirname(__file__), "..", "..")
+
+OUT_DIR = os.path.join(BASE_DIR, "out")
 os.makedirs(OUT_DIR, exist_ok=True)
 
 def _wav_path(run_id: str) -> str:
@@ -65,7 +74,16 @@ def calculate_ptnn(chars_original: int, chars_extracted: int) -> float:
 def speak(payload: SpeakIn):
     import time
     
+    # PASO 0: Limpieza total de audios previos (evita acumulación de basura)
+    for f in glob.glob(os.path.join(OUT_DIR, "*.wav")):
+        try:
+            os.remove(f)
+            print(f"[CLEANUP] Archivo residual eliminado: {os.path.basename(f)}")
+        except Exception as e:
+            logging.warning(f"No se pudo limpiar {f}: {e}")
+
     run_id = uuid.uuid4().hex
+    wav_path = _wav_path(run_id)
     start_time_total = time.time()
     
     # Variables para métricas
@@ -86,7 +104,6 @@ def speak(payload: SpeakIn):
         
         # PASO 2: TTS
         start_tts = time.time()
-        wav_path = _wav_path(run_id)
         text_to_wav(
             text=content_txt,
             out_path=wav_path,
@@ -127,8 +144,14 @@ def speak(payload: SpeakIn):
         return SpeakOut(run_id=run_id)
     
     except HTTPException:
+        if os.path.exists(wav_path):
+            try: os.remove(wav_path)
+            except: pass
         raise
     except Exception as exc:
+        if os.path.exists(wav_path):
+            try: os.remove(wav_path)
+            except: pass
         logging.exception("Error en backend")
         raise HTTPException(status_code=500, detail=f"Backend error: {exc}")
 

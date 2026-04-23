@@ -125,11 +125,3 @@ def extract_readable_text(html: str, url: Optional[str] = None) -> str:
     print(f"[DEBUG EXTRACTOR] Texto final: {len(text)} chars")
     print(f"[DEBUG EXTRACTOR] ========== FIN EXTRACCIÓN ==========\n")
     return text
-
-def extract_text_from_html(html: str, url: Optional[str] = None) -> str:
-    """Alias de compatibilidad"""
-    return extract_readable_text(html, url)
-
-def pick_content(html: str, url: Optional[str] = None) -> str:
-    """Alias de compatibilidad"""
-    return extract_readable_text(html, url)

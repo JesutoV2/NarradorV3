@@ -129,10 +129,3 @@ def clean_html_and_pick(html: str) -> str:
     _strip_noise(soup)                     # 2) Quitar ruido + ocultos
     root = _pick_main_container(soup)      # 3) Contenedor "amigo" genérico
     return str(root)
-
-# Wrappers compatibles con posibles imports antiguos
-def clean_html(html: str) -> str:
-    return clean_html_and_pick(html)
-
-def select_main(html: str) -> str:
-    return clean_html_and_pick(html)

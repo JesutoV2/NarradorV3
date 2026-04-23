@@ -1,9 +1,6 @@
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
-trafilatura==1.12.2
-spacy==3.7.4
 pyttsx3==2.90
 pydantic==2.8.2
 beautifulsoup4==4.12.3
-psutil==5.9.8
-pyodbc==5.1.0
+lxml==5.1.0
