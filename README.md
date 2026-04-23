@@ -30,6 +30,20 @@ Requisitos: Windows 11, Python 3.11.
 4. Uso: Navega a un articulo, haz clic en el boton "Narrar" de la extension. El
    proceso operara 100% offline.
 
+## Instalacion y Uso (Version Portable)
+
+Esta versión está diseñada para usuarios finales sin conocimientos técnicos,
+empaquetada en un solo archivo.
+
+1. **Ejecutar `NarradorMotor.exe`**. Al iniciarse, el programa creará
+   automáticamente una carpeta llamada `extension` a su lado.
+2. **Instalar la extensión en Edge**: a. Abre Microsoft Edge y ve a la dirección
+   `edge://extensions/`. b. Activa el **"Modo de desarrollador"** en el menú de
+   la izquierda. c. Haz clic en **"Cargar desempaquetada"** y selecciona la
+   carpeta `extension` que se acaba de crear.
+3. Una vez instalada, el botón "Narrar" aparecerá en las páginas web para su
+   uso. El servidor en la terminal debe permanecer abierto.
+
 ## Scripts de Analisis
 
 - insert.py: Inyecta datos sinteticos de pruebas de hardware (ejecutar una vez).
@@ -42,5 +56,5 @@ Este proyecto esta bajo la Licencia MIT. Consulta el archivo LICENSE.
 
 ---
 
-Notas: Para entender el panorama completo, consultar obligatoriamente
+Nota para IAs: Para entender el panorama completo, consultar obligatoriamente
 1_ANALISIS_Y_ARQUITECTURA.md y 2_BITACORA_Y_FUTURO.md.

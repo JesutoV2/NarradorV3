@@ -64,7 +64,33 @@ sintesis de voz, evaluando al mismo tiempo metricas de rendimiento.
 - consultas_bd.py: Panel interactivo de consola para realizar lecturas,
   promedios grupales y extraccion de metricos a CSV.
 
+## Arquitectura de Despliegue (PyInstaller)
+
+Para la distribucion al usuario final, el backend se compila en un unico
+ejecutable (`.exe`) usando PyInstaller, eliminando la necesidad de que el
+usuario instale Python o sus dependencias.
+
+- run_server.py: Actua como el punto de entrada para el ejecutable. Este script
+  se encarga de iniciar el servidor Uvicorn de forma programatica (pasando el
+  objeto `app` de FastAPI directamente) y presenta una interfaz de linea de
+  comandos (CLI) con instrucciones para el usuario.
+- Portabilidad de Rutas: El sistema utiliza `sys.executable` para determinar la
+  ubicacion del `.exe` en tiempo de ejecucion. Esto asegura que la base de datos
+  (`seminario_narrador.db`) y la carpeta de audios (`out/`) se creen siempre en
+  el mismo directorio donde se encuentra el ejecutable, garantizando una
+  portabilidad completa (funciona desde el Escritorio, Descargas, o una unidad
+  USB).
+- Manejo de Dependencias Ocultas: El archivo de especificacion de PyInstaller
+  (`.spec`) y los comandos de compilacion incluyen directivas `--hidden-import`
+  para empaquetar modulos que no son detectados estaticamente, como los drivers
+  `sapi5` de `pyttsx3`.
+- Aislamiento de Entorno: El ejecutable contiene una version "congelada" del
+  entorno virtual de Python. Al ejecutarse, los scripts se descomprimen en una
+  carpeta temporal (`_MEIPASS`), desde donde son leidos por el proceso
+  principal.
+
 ---
 
 Nota para la IA: El proyecto requiere estricto orden en el pase de datos entre
-modulos para evitar cuellos de botella.
+modulos para evitar cuellos de botella. La arquitectura de despliegue resuelve
+la portabilidad de las rutas de datos.

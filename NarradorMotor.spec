@@ -5,7 +5,7 @@ a = Analysis(
     ['run_server.py'],
     pathex=['src/backend'],
     binaries=[],
-    datas=[],
+    datas=[('src/extension', 'extension')],
     hiddenimports=['pyttsx3.drivers.sapi5'],
     hookspath=[],
     hooksconfig={},

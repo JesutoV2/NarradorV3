@@ -1,6 +1,7 @@
 import sys
 import os
 import traceback
+import shutil
 
 # 1. Inyectar la ruta ANTES de importar módulos locales
 if getattr(sys, 'frozen', False):
@@ -31,17 +32,37 @@ def print_ui():
     print("="*60)
     print("\nEl servidor está corriendo de forma segura en tu equipo.")
     print("Por favor, no cierres esta ventana mientras uses el narrador.\n")
-    print("INSTRUCCIONES PARA EL NAVEGADOR:")
+    print("INSTRUCCIONES DE INSTALACIÓN (solo la primera vez):")
     print("1. Abre Microsoft Edge.")
     print("2. Escribe 'edge://extensions/' en la barra de búsqueda.")
     print("3. Activa el 'Modo de desarrollador' (menú izquierdo).")
-    print("4. Haz clic en 'Cargar desempaquetada' y selecciona la carpeta 'extension'.")
+    print("4. Haz clic en 'Cargar desempaquetada' y selecciona la carpeta 'extension'")
+    print("   que apareció junto a este programa.")
     print("\n------------------------------------------------------------")
     print("Presiona Ctrl+C en esta ventana para apagar el motor.")
     print("------------------------------------------------------------\n")
 
+def extract_extension_if_needed():
+    if not getattr(sys, 'frozen', False):
+        return # No hacer nada si no es un .exe
+
+    try:
+        exe_path = os.path.dirname(sys.executable)
+        extension_dest_path = os.path.join(exe_path, "extension")
+        
+        # La ruta fuente dentro del .exe (definida en el comando de PyInstaller)
+        extension_source_path = os.path.join(sys._MEIPASS, "extension")
+
+        print("📦 Verificando la carpeta de la extensión...")
+        shutil.copytree(extension_source_path, extension_dest_path, dirs_exist_ok=True)
+        print("✅ La carpeta 'extension' está lista.\n")
+    except Exception as e:
+        print(f"⚠️  No se pudo extraer la carpeta de la extensión: {e}")
+        print("   Por favor, extrae la carpeta 'extension' manualmente.\n")
+
 if __name__ == "__main__":
     try:
+        extract_extension_if_needed()
         print_ui()
         # Pasamos el objeto de la aplicación directamente en lugar del string
         uvicorn.run(fastapi_app, host="127.0.0.1", port=8000, log_level="warning")

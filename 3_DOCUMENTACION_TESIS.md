@@ -215,6 +215,19 @@ preguntas sobre las tecnologias descartadas.
   analisis academico. Mantenerla en produccion incurriria en violaciones de
   privacidad (guardar las URLs que lee el usuario) y degradacion progresiva del
   disco (crecimiento infinito del archivo `.db`).
+- **Estrategia de Empaquetado y Distribucion Hibrida:** Para resolver la brecha
+  de usabilidad entre un entorno de desarrollo Python y un usuario final sin
+  conocimientos tecnicos, se empleo PyInstaller. El reto principal radico en las
+  politicas de seguridad de navegadores (Manifest V3), las cuales prohiben
+  estrictamente que un software externo instale extensiones de forma silenciosa
+  para prevenir inyecciones de malware. La solucion arquitectonica implementada
+  fue un ejecutable "auto-extraible": el servidor FastAPI, el motor TTS local y
+  los recursos del frontend se compilaron en un unico binario portable (`.exe`).
+  Al ejecutarse, el programa enciende el servidor y utiliza rutinas de I/O
+  (`shutil`) para descomprimir la carpeta de la extension desde su memoria
+  temporal (`sys._MEIPASS`) hacia el directorio del usuario. Esto garantiza una
+  distribucion simple de un solo archivo, respetando integralmente los
+  protocolos de seguridad de navegadores basados en Chromium.
 
 ---
 

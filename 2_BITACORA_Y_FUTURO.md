@@ -5,7 +5,7 @@ Aviso para asistentes de IA: Este archivo, junto con
 memoria a largo plazo de este proyecto. Deben consultarse antes de sugerir
 cambios en la base de codigo y actualizarse constantemente.
 
-## Contexto y Estado del Proyecto (abril 2026)
+## Contexto y Estado del Proyecto (Noviembre 2025)
 
 El Narrador Web V2 es una herramienta de accesibilidad enfocada en extraer y
 leer el contenido principal de paginas web de forma privada y local. El backend
@@ -38,6 +38,19 @@ preparacion para produccion:
     atado en la documentacion oficial (README) y el copyright del autor,
     brindando proteccion legal ante un despliegue de produccion.
 
+- Fase 4 (Empaquetado Plug and Play):
+  - Se completo exitosamente la compilacion del backend en un archivo
+    `NarradorMotor.exe` portable usando PyInstaller.
+  - Se creo el script `run_server.py` como punto de entrada, el cual inicia
+    Uvicorn programaticamente y provee una interfaz de usuario en la terminal.
+  - Se implemento un sistema de deteccion de rutas dinamicas (`sys.executable` y
+    `sys._MEIPASS`) en `main.py` y `db.py` para asegurar que la base de datos y
+    los audios se guarden de forma relativa al ejecutable, garantizando su
+    portabilidad.
+  - Se resolvieron errores de importacion en el entorno compilado al pasar el
+    objeto de la aplicacion FastAPI directamente a Uvicorn, en lugar de un
+    string.
+
 ## Hoja de Ruta Activa
 
 Con la estabilidad del sistema terminada, las siguientes fases migran hacia
@@ -55,7 +68,7 @@ empaquetado y documentacion.
 ### Fase 4: Reestructuracion Final (Plug and Play)
 
 - Objetivo: Transformar el proyecto de un script dependiente de CLI a un
-  producto consumible por el publico final sin accesibilidad web.
+  producto consumible por el publico final con accesibilidad web.
 - Problema central: Ejecutar entornos virtuales de Python es propenso a fallas
   en usuarios estandar.
 - Solucion: Compilar el entorno entero en un ejecutable cerrado empleando
