@@ -185,6 +185,17 @@ general en paises en vias de desarrollo:
 3. **Gama Baja (Legacy):** Procesador de 2da Generacion, 8GB RAM, Almacenamiento
    Mecanico HDD (Factor ~3.15x mas lento).
 
+**Estrategia de Recoleccion de Datos Descentralizada:** Para fundamentar los
+datos, se diseñaron pruebas de campo en hardware fisico aislado. Dado que el
+software compilado genera una base de datos local e independiente en cada
+computadora evaluada, se implemento un algoritmo de consolidacion
+(`merge_db.py`). Este componente emplea el comando nativo `ATTACH DATABASE` de
+SQLite para vincular dinamicamente la base de datos de prueba con la maestra.
+Mediante el mapeo de claves primarias autoincrementales y sentencias de
+insercion condicionada (`INSERT OR IGNORE`), el algoritmo fusiona las
+ejecuciones externas, centralizando las metricas de rendimiento sin generar
+duplicidad de paginas o colisiones de datos.
+
 **Conclusiones de la simulacion para la tesis:** Los resultados guardados en
 SQLite validan que, aunque el PTNN permanece constante (el algoritmo es
 determinista matematicamente y filtrara la misma cantidad de basura sin importar
@@ -215,19 +226,6 @@ preguntas sobre las tecnologias descartadas.
   analisis academico. Mantenerla en produccion incurriria en violaciones de
   privacidad (guardar las URLs que lee el usuario) y degradacion progresiva del
   disco (crecimiento infinito del archivo `.db`).
-- **Estrategia de Empaquetado y Distribucion Hibrida:** Para resolver la brecha
-  de usabilidad entre un entorno de desarrollo Python y un usuario final sin
-  conocimientos tecnicos, se empleo PyInstaller. El reto principal radico en las
-  politicas de seguridad de navegadores (Manifest V3), las cuales prohiben
-  estrictamente que un software externo instale extensiones de forma silenciosa
-  para prevenir inyecciones de malware. La solucion arquitectonica implementada
-  fue un ejecutable "auto-extraible": el servidor FastAPI, el motor TTS local y
-  los recursos del frontend se compilaron en un unico binario portable (`.exe`).
-  Al ejecutarse, el programa enciende el servidor y utiliza rutinas de I/O
-  (`shutil`) para descomprimir la carpeta de la extension desde su memoria
-  temporal (`sys._MEIPASS`) hacia el directorio del usuario. Esto garantiza una
-  distribucion simple de un solo archivo, respetando integralmente los
-  protocolos de seguridad de navegadores basados en Chromium.
 
 ---
 

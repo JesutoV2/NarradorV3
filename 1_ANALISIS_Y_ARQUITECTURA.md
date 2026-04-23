@@ -63,6 +63,9 @@ sintesis de voz, evaluando al mismo tiempo metricas de rendimiento.
   la CLI.
 - consultas_bd.py: Panel interactivo de consola para realizar lecturas,
   promedios grupales y extraccion de metricos a CSV.
+- merge_db.py: Script de fusion de bases de datos SQLite. Permite consolidar los
+  registros analiticos de pruebas realizadas en computadoras externas dentro de
+  la base de datos maestra usando el comando ATTACH DATABASE.
 
 ## Arquitectura de Despliegue (PyInstaller)
 
